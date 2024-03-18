@@ -8,6 +8,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+import shlex
 
 
 class FileStorage:
@@ -25,7 +26,7 @@ class FileStorage:
                 part = shlex.split(part)
                 if (part[0] == cls.__name__):
                     cls_dict[key] = self.__objects[key]
-            return cls_dicts
+            return cls_dict
         return self.__objects
 
     def new(self, obj):
@@ -48,12 +49,14 @@ class FileStorage:
             with open(self.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
-        """delete obj form __objects if it's inside.if obj is None do nothing"""
+        """
+            delete obj form __objects if it's inside.if obj is None do nothing
+        """
         if obj:
             temp = self.__objects
             key = "{}.{}".format(type(obj).__name__, obj.id)
