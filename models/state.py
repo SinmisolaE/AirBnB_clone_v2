@@ -9,7 +9,7 @@ from models.city import City
 import shlex
 
 
-class State(BaseModel):
+class State(BaseModel, Base):
     """ State class """
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
@@ -18,7 +18,6 @@ class State(BaseModel):
     @property
     def cities(self):
         """ returns list of City instances with state_id == State.id"""
-        list = {}
         result = {}
         vars = models.storage.all()
         for key in vars:
