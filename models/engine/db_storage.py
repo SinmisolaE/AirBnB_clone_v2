@@ -3,7 +3,7 @@
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import (create_engine)
 from os import getenv
-from sqlalchemy.ext.declarartve import declarative_base()
+from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel
 from models.state import State
 from models.user import User

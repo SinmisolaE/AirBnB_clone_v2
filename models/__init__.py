@@ -9,7 +9,7 @@ from models.place import Place
 from models.amenity import Amenity
 from models.state import State
 from models.base_model import BaseModel
-from models.db_storage import DBStorage
+from models.engine.db_storage import DBStorage
 
 
 if (getenv("HBNB_TYPE_STORAGE") == "db"):

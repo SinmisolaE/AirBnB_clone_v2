@@ -48,12 +48,15 @@ class FileStorage:
             with open(self.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.__objects[key] = eval(val['__class__'])(**val)
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
-        """delete obj form __objects if it's inside.if obj is None do nothing"""
+        """
+            delete obj form __objects if it's inside.
+            if obj is None do nothing
+        """
         if obj:
             temp = self.__objects
             key = "{}.{}".format(type(obj).__name__, obj.id)
