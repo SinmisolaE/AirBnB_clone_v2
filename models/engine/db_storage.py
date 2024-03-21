@@ -25,7 +25,7 @@ class DBStorage:
         host = getenv("HBNB_MYSQL_HOST")
         db = getenv("HBNB_MYSQL_DB")
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}/'
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
                                       .format(user, passwd, host, db),
                                       pool_pre_ping=True)
 
@@ -44,15 +44,16 @@ class DBStorage:
                 dict[key] = ins
         else:
             listc = [State, Place, User, City, Amenity, Review]
-            query = self.__session.query(listc)
-            for ins in query:
-                key = "{}.{}".format(type(ins).__name__, ins.id)
-                dict[key] = ins
+            for ins in listc:
+                query = self.__session.query(ins)
+                for elem in query:
+                    key = "{}.{}".format(type(elem).__name__, elem.id)
+                    dict[key] = elem
         return dict
 
     def new(self, obj):
         """ adds object to current database session"""
-        sef.__session.add(obj)
+        self.__session.add(obj)
 
     def save(self):
         """commit all changes of current database session"""
@@ -69,7 +70,7 @@ class DBStorage:
         ses = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(ses)
         self.__session = Session()
-    
+
     def close(self):
         """calls remove()
         """
