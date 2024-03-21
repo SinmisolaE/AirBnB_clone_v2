@@ -1,11 +1,9 @@
---prepares a MySQL server for the project
---database 'hbtnb_dev_db', new user'hbnb_dev'(in localhost)
---password for user set to 'hbtnb_dev_db'
--- grant all privileges to new user to db
--- grant select to databse 'performance_scheme'
--- script shouldn't fail if db or user exists
-
-CREATE DATABASE IF NOT EXISTS `hbtnb_dev_db`;
-CREATE USER IF NOT EXISTS `hbnb_dev`@`localhost` IDENTIFIED BY `hbnb_dev_pwd`;
-GRANT ALL PRIVILEGES ON `hbtnb_dev_db`.* TO `hbnb_dev`@`localhost`;
-GRANT SELECT ON `performance_schema`.* TO `hbnb_dev`@`localhost`;
+-- Creating hbnb_dev_db database
+-- Privileges for new user (hbnb_dev)
+CREATE DATABASE IF NOT EXISTS hbnb_dev_db;
+CREATE USER IF NOT EXISTS 'hbnb_dev'@'localhost';
+SET PASSWORD FOR 'hbnb_dev'@'localhost' = 'hbnb_dev_pwd';
+USE hbnb_dev_db;
+GRANT ALL PRIVILEGES ON hbnb_dev_db.* TO 'hbnb_dev'@'localhost';
+GRANT SELECT ON performance_schema.* TO 'hbnb_dev'@'localhost';
+FLUSH PRIVILEGES;
