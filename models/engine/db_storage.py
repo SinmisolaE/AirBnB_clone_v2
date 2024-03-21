@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import (create_engine)
 from os import getenv
 from sqlalchemy.ext.declarative import declarative_base
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.state import State
 from models.user import User
 from models.place import Place
@@ -24,9 +24,11 @@ class DBStorage:
         passwd = getenv("HBNB_MYSQL_PWD")
         host = getenv("HBNB_MYSQL_HOST")
         db = getenv("HBNB_MYSQL_DB")
+
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}/'
                                       .format(user, passwd, host, db),
                                       pool_pre_ping=True)
+
         if (getenv("HBNB_ENV") == "test"):
             Base.metadata.drop_all(self.__engine)
 
@@ -41,8 +43,8 @@ class DBStorage:
                 key = "{}.{}".format(type(ins).__name__, ins.id)
                 dict[key] = ins
         else:
-            list = [State, Place, User, City, Amenity, Review]
-            query = self.__session.query(list)
+            listc = [State, Place, User, City, Amenity, Review]
+            query = self.__session.query(listc)
             for ins in query:
                 key = "{}.{}".format(type(ins).__name__, ins.id)
                 dict[key] = ins
@@ -64,6 +66,11 @@ class DBStorage:
     def reload(self):
         """create all tables in database"""
         Base.metadata.create_all(self.__engine)
-        ses = sessionmaker(bind=engine, expire_on_commit=False)
+        ses = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(ses)
         self.__session = Session()
+    
+    def close(self):
+        """calls remove()
+        """
+        self.__session.close()
